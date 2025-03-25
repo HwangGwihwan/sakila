@@ -11,7 +11,7 @@
 	
 	System.out.println("CurrentPage: " + currentPage);
 	
-	int rowPerPage = 15;
+	int rowPerPage = 7;
 	int startRow = (currentPage - 1) * rowPerPage;
 	
 	int storeId = 0;
@@ -158,6 +158,41 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style>
+			body {
+				margin: 0;
+				padding: 5px;
+				width: 80%;
+				text-align: center;
+			}
+			#table {
+				width: 80%;
+				margin: 20px auto;
+				border: 1px solid black;
+				border-radius: 10px;
+			}
+			#table th, #table td {
+				border: 1px solid black;
+				padding: 10px;
+				text-align: center;
+			}
+			#table tr:nth-child(even) {
+				background-color: #f2f2f2;
+			}
+			#page {
+				margin-top: 20px;
+				text-align: center;
+			}
+			#page a {
+				display: inline-block;
+				padding: 4px 8px;
+				margin: 0 5px;
+				text-decoration: none;
+				color: black;
+				border: 1px solid black;
+				border-radius: 15px;
+			}
+		</style>
 	</head>
 	<body>
 		<h1>Rental List</h1>
@@ -172,7 +207,7 @@
 			<button type="submit">검색</button>
 		</form>
 		
-		<table border="1">
+		<table id="table">
 			<tr>
 				<th>rentalId</th>
 				<th>filmTitle</th>
@@ -198,51 +233,53 @@
 		</table>
 		
 		<!-- 페이징 -->
-		<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=1'>[처음]</a>
-		
-		<%
-			if (currentPage > 10) {
-		%>
-				<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=currentPage - 10%>'>[이전10]</a>
-		<%
-			}
-		
-			int startPage = currentPage / 10; // 보여줄 페이지 시작
-			if (currentPage % 10 != 0) { // 0~10페이지 -> 1, 11~20페이지 -> 2
-				startPage++;
-			}
-			startPage = (startPage - 1) * 10; // 시작 페이지 결정 0, 10, 20 ...
-		
-			int endPage = lastPage / 10; // 다음[10] 페이지를 보여줄 수 있는 마지막 페이지 구하기
-			if (lastPage % 10 == 0) {
-				endPage--;
-			}
-			endPage = endPage * 10;
+		<div id="page">
+			<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=1'>[처음]</a>
 			
-			for (int i = 1; i <= 10; i++) {
-				if (startPage + i <= lastPage) { // 마지막 페이지까지만 보이게
-		%>
-					<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=startPage + i%>'><%=startPage + i%></a>
-		<%
+			<%
+				if (currentPage > 10) {
+			%>
+					<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=currentPage - 10%>'>[이전10]</a>
+			<%
 				}
-			}
 			
-			
-			if (currentPage <= endPage) { // 10페이지를 뒤로 넘길 수 있는 페이지가 맞으면
-				if (currentPage + 10 <= lastPage) {
-		%>
-					<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=currentPage + 10%>'>[다음10]</a>
-		<%
-				} else { // 10페이지를 더했을때 마지막페이지보다 크면 마지막페이지로 강제로 이동
-		%>
-					<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=lastPage%>'>[다음10]</a>
-		<%
+				int startPage = currentPage / 10; // 보여줄 페이지 시작
+				if (currentPage % 10 != 0) { // 0~10페이지 -> 1, 11~20페이지 -> 2
+					startPage++;
 				}
-			}
+				startPage = (startPage - 1) * 10; // 시작 페이지 결정 0, 10, 20 ...
 			
-		%>
-
-		<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=lastPage%>'>[마지막]</a>
+				int endPage = lastPage / 10; // 다음[10] 페이지를 보여줄 수 있는 마지막 페이지 구하기
+				if (lastPage % 10 == 0) {
+					endPage--;
+				}
+				endPage = endPage * 10;
+				
+				for (int i = 1; i <= 10; i++) {
+					if (startPage + i <= lastPage) { // 마지막 페이지까지만 보이게
+			%>
+						<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=startPage + i%>'><%=startPage + i%></a>
+			<%
+					}
+				}
+				
+				
+				if (currentPage <= endPage) { // 10페이지를 뒤로 넘길 수 있는 페이지가 맞으면
+					if (currentPage + 10 <= lastPage) {
+			%>
+						<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=currentPage + 10%>'>[다음10]</a>
+			<%
+					} else { // 10페이지를 더했을때 마지막페이지보다 크면 마지막페이지로 강제로 이동
+			%>
+						<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=lastPage%>'>[다음10]</a>
+			<%
+					}
+				}
+				
+			%>
+	
+			<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=lastPage%>'>[마지막]</a>
+		</div>
 		
 		<form action="/sakila/d0325/rentalList.jsp">
 			<input type="hidden" name="storeId" value=<%=storeId%>>
