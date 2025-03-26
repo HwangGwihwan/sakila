@@ -90,6 +90,23 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<style>
+			body {
+				padding: 5px;
+				text-align: center;
+				width: 100%;
+			}
+			#table {
+				margin: 20px auto;
+				border: 1px solid black;
+				border-radius: 10px;
+			}
+			#table th, td {
+				border: 1px solid black;
+				padding: 10px;
+				text-aglin: center;
+			}
+		</style>
 	</head>
 	<body>
 		<h1>Actor List</h1>
@@ -100,7 +117,7 @@
 			<button type="submit">검색</button>
 		</form>
 		
-		<table border="1">
+		<table id="table">
 			<tr>
 				<th>actorId</th>
 				<th>name</th>
