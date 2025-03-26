@@ -1,4 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <!DOCTYPE html>
 <html>
 	<head>
@@ -9,6 +10,9 @@
 		<h1>Index</h1>
 		<ol>
 			<li><a href="/sakila/d0325/rentalList.jsp">대여목록</a></li>
+			<li><a href="/sakila/d0326/filmList.jsp">필름목록</a></li>
+			<li><a href="/sakila/d0326/actorList.jsp">엑터
+			목록</a></li>
 		</ol>
 	</body>
 </html>
