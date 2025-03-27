@@ -3,8 +3,8 @@
 <%@ page import="java.sql.*"%>
 <!-- Controller -->
 <%
-	String title = request.getParameter("title");
-	System.out.println("title: " + title);
+	int filmId = Integer.parseInt(request.getParameter("filmId"));
+	System.out.println("filmId: " + filmId);
 %>
 
 <!-- Model -->
@@ -18,11 +18,11 @@
 	String sql1 = "select f.title, f.description, f.release_year, f.length, f.rating, f.special_features, c.name"
 				+ " from film f INNER JOIN film_category fc on f.film_id = fc.film_id"
 				+ " INNER JOIN category c ON fc.category_id = c.category_id"
-				+ " where title like ?";
+				+ " where f.film_id = ?";
 			
 	
 	stmt1 = conn.prepareStatement(sql1);
-	stmt1.setString(1, "%" + title + "%");
+	stmt1.setInt(1, filmId);
 	rs1 = stmt1.executeQuery();
 	rs1.next();
 	
@@ -38,18 +38,19 @@
 	
 	PreparedStatement stmt2 = null;
 	ResultSet rs2 = null;
-	String sql2 = "SELECT CONCAT_WS(' ', a.first_name, a.last_name) AS name"
+	String sql2 = "SELECT a.actor_id, CONCAT_WS(' ', a.first_name, a.last_name) AS name"
 				+ " FROM film f INNER JOIN film_actor fa ON f.film_id = fa.film_id"
 				+ " INNER JOIN actor a ON fa.actor_id = a.actor_id"
-				+ " WHERE f.title LIKE ?";
+				+ " WHERE f.film_id = ?";
 	
 	stmt2 = conn.prepareStatement(sql2);
-	stmt2.setString(1, "%" + title + "%");
+	stmt2.setInt(1, filmId);
 	rs2 = stmt2.executeQuery();
 	
 	ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 	while (rs2.next()) {
 		HashMap<String, Object> map2 = new HashMap<String, Object>();
+		map2.put("actorId", rs2.getInt("a.actor_id"));
 		map2.put("name", rs2.getString("name"));
 		list.add(map2);
 	}
@@ -116,7 +117,7 @@
 				<%
 					for (HashMap<String, Object> map2 : list) {
 				%>
-						<a href='/sakila/d0326/actorOne.jsp?name=<%=map2.get("name")%>'><%=map2.get("name")%></a>
+						<a href='/sakila/d0326/actorOne.jsp?actorId=<%=map2.get("actorId")%>'><%=map2.get("name")%></a>
 						<br>
 				<%
 					}

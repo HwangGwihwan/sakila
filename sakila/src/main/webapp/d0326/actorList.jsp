@@ -129,7 +129,7 @@
 					<tr>
 						<td><%=map.get("actorId")%></td>
 						<td>
-							<a href='/sakila/d0326/actorOne.jsp?name=<%=map.get("name")%>'><%=map.get("name")%></a>
+							<a href='/sakila/d0326/actorOne.jsp?actorId=<%=map.get("actorId")%>'><%=map.get("name")%></a>
 						</td>
 					</tr>
 			<%
