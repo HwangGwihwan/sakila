@@ -13,9 +13,16 @@
 	
 	String currentPw = request.getParameter("currentPw");
 	String updatePw = request.getParameter("updatePw");
+	String updatePw2 = request.getParameter("updatePw2");
 	
 	System.out.println("currentPw: " + currentPw);
 	System.out.println("updatePw: " + updatePw);
+	System.out.println("updatePw2: " + updatePw2);
+	
+	if (!updatePw.equals(updatePw2)) {
+		response.sendRedirect("/sakila/d0328/updatePasswordForm.jsp");
+		return;
+	}
 %>
 
 <!-- Model -->
@@ -26,6 +33,7 @@
 	
 	PreparedStatement stmt = null;
 	int row = 0;
+	
 	String sql = "update staff set password = ? where staff_id = ? and password = ?";
 	
 	stmt = conn.prepareStatement(sql);
@@ -35,7 +43,7 @@
 	row = stmt.executeUpdate();
 
 	if (row == 0) {
-		response.sendRedirect("/sakila/updatePasswordForm.jsp");		
+		response.sendRedirect("/sakila/d0328/updatePasswordForm.jsp");		
 	} else {
 		response.sendRedirect("/sakila/logout.jsp");
 	}

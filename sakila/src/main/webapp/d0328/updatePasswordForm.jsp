@@ -17,7 +17,7 @@
 	</head>
 	<body>
 		<h1>비밀번호 수정</h1>
-		<form action="/sakila/updatePasswordAction.jsp">
+		<form action="/sakila/d0328/updatePasswordAction.jsp">
 			<table border="1">
 				<tr>
 					<th>현재 비밀번호</th>
@@ -29,6 +29,12 @@
 					<th>새 비밀번호</th>
 					<td>
 						<input type="password" name="updatePw">
+					</td>					
+				</tr>
+				<tr>
+					<th>비밀번호확인</th>
+					<td>
+						<input type="password" name="updatePw2">
 					</td>					
 				</tr>
 			</table>
