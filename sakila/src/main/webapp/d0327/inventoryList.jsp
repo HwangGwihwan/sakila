@@ -3,6 +3,14 @@
 <%@ page import="java.sql.*"%>
 <!-- Controller -->
 <%
+	//로그인 되었는지 아닌지?
+	Integer staffId = (Integer)session.getAttribute("loginStaff");
+	
+	if (staffId == null) { // 로그아웃 상태라면
+		response.sendRedirect("/sakila/loginForm.jsp");
+		return;
+	}
+
 	int currentPage = 1;
 	if (request.getParameter("currentPage") != null) {
 		currentPage = Integer.parseInt(request.getParameter("currentPage"));
@@ -146,9 +154,12 @@
 							if (map.get("rentalDate") != null && map.get("returnDate") == null) {
 								// rentalDate는 null이 아님 -> 대여 했음 && retunDate가 null임 -> 반납 안했음
 								// 대여 불가능
+						%>
+								<span>대여불가</span>
+						<%
 							} else { // 나머지 조건은 대여 가능
 						%>
-								<a href="">대여</a>
+								<a href="">대여가능</a>
 						<%
 							}
 						%>

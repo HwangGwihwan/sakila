@@ -3,6 +3,14 @@
 <%@ page import="java.sql.*"%>
 <!-- Controller -->
 <%
+	//로그인 되었는지 아닌지?
+	Integer staffId = (Integer)session.getAttribute("loginStaff");
+
+	if (staffId == null) { // 로그아웃 상태라면
+		response.sendRedirect("/sakila/index.jsp");
+		return;
+	}
+	
 	int filmId = Integer.parseInt(request.getParameter("filmId"));
 	System.out.println("filmId: " + filmId);
 %>
