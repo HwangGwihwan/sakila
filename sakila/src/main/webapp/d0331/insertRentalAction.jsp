@@ -18,7 +18,7 @@
 <%
 	Connection conn = null;
 	PreparedStatement stmt = null;
-	String sql = "INSERT INTO rental(inventory_id, customer_id, staff_id) VALUES (?, ?, ?)";
+	String sql = "INSERT INTO rental(rental_date, inventory_id, customer_id, staff_id) VALUES (now(), ?, ?, ?)";
 	
 	Class.forName("com.mysql.cj.jdbc.Driver");
 	conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/sakila", "root", "java1234");
