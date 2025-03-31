@@ -165,6 +165,7 @@
 	<head>
 		<meta charset="UTF-8">
 		<title></title>
+		<!--
 		<style>
 			body {
 				margin: 0;
@@ -200,10 +201,11 @@
 				border-radius: 15px;
 			}
 		</style>
+		 -->
 	</head>
 	<body>
 		<h1>Rental List</h1>
-		<form action="/sakila/d0325/rentalList.jsp">
+		<form action="/sakila/d0325/rentalList.jsp" method="post">
 			<input type="hidden" name="searchWord" value=<%=searchWord%>>
 			Store :
 			<select name="storeId">
@@ -214,7 +216,7 @@
 			<button type="submit">검색</button>
 		</form>
 		
-		<table id="table">
+		<table border = "1"> <!-- id="table" -->
 			<tr>
 				<th>rentalId</th>
 				<th>filmTitle</th>
@@ -288,7 +290,7 @@
 			<a href='/sakila/d0325/rentalList.jsp?storeId=<%=storeId%>&searchWord=<%=searchWord%>&currentPage=<%=lastPage%>'>[마지막]</a>
 		</div>
 		
-		<form action="/sakila/d0325/rentalList.jsp">
+		<form action="/sakila/d0325/rentalList.jsp" method="post">
 			<input type="hidden" name="storeId" value=<%=storeId%>>
 			filmTitle Search Word :
 			<input type="text" name="searchWord" value=<%if(!searchWord.equals("")){%><%=searchWord%><%}%>>

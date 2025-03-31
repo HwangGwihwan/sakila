@@ -118,7 +118,7 @@
 	<body>
 		<h1>Film List</h1>
 		
-		<form action="/sakila/d0326/filmList.jsp">
+		<form action="/sakila/d0326/filmList.jsp" method="post">
 			Search:
 			<input type="text" name="searchWord" value=<%if(!searchWord.equals("")){%><%=searchWord%><%}%>>
 			<button type="submit">검색</button>

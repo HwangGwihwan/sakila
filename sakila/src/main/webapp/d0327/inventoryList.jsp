@@ -128,7 +128,7 @@
 	<body>
 		<h1>Inventory List</h1>
 		
-		<form action="/sakila/d0327/inventoryList.jsp">
+		<form action="/sakila/d0327/inventoryList.jsp" method="post">
 			Search:
 			<input type="text" name="searchWord" value=<%if(!searchWord.equals("")){%><%=searchWord%><%}%>>
 			<button type="submit">검색</button>
@@ -155,11 +155,11 @@
 								// rentalDate는 null이 아님 -> 대여 했음 && retunDate가 null임 -> 반납 안했음
 								// 대여 불가능
 						%>
-								<span>대여불가</span>
+								<a>반납하기</a>
 						<%
 							} else { // 나머지 조건은 대여 가능
 						%>
-								<a href="">대여가능</a>
+								<a href='/sakila/d0331/insertRentalForm.jsp?inventoryId=<%=map.get("inventoryId")%>'>대여하기</a>
 						<%
 							}
 						%>
