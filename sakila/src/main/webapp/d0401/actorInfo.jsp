@@ -17,7 +17,7 @@
 	
 	System.out.println("CurrentPage: " + currentPage);
 	
-	int rowPerPage = 15;
+	int rowPerPage = 5;
 	int startRow = (currentPage - 1) * rowPerPage;
 	
 	String searchWord = request.getParameter("searchWord");
@@ -39,7 +39,7 @@
 	ResultSet rs1 = null;
 	
 	// searchWord 공백일때
-	String sql1 = "select count(*) cnt from customer";
+	String sql1 = "select count(*) cnt from actor";
 	stmt1 = conn.prepareStatement(sql1);
 	
 	if (!searchWord.equals("")) {
@@ -63,19 +63,26 @@
 	PreparedStatement stmt2 = null;
 	ResultSet rs2 = null;
 	
-	String sql2 = "SELECT c.customer_id ID, CONCAT(c.first_name, ' ', c.last_name) NAME, a.address, a.postal_code zipcode, a.phone, ct.city, co.country, case when active = 1 then 'active' when active = 0 then '' END AS notes, c.store_id SID"
-				+ " FROM customer c INNER JOIN address a ON c.address_id = a.address_id"
-				+ 	" INNER JOIN city ct ON a.city_id = ct.city_id"
-				+	" INNER JOIN country co ON ct.country_id = co.country_id";
-	
+	String sql2 = "SELECT a.actor_id, a.first_name, a.last_name, GROUP_CONCAT(t.film_info SEPARATOR '; ') film_info"
+				+ " FROM actor a INNER JOIN"
+				+ 	" (SELECT a.actor_id, CONCAT(c.name, ': ', GROUP_CONCAT(f.title SEPARATOR ', ')) film_info"
+				+ 	" FROM actor a INNER JOIN film_actor fa ON a.actor_id = fa.actor_id"
+				+ 		" INNER JOIN film f ON fa.film_id = f.film_id"
+				+ 		" INNER JOIN film_category fc ON f.film_id = fc.film_id"
+				+ 		" INNER JOIN category c ON fc.category_id = c.category_id"
+				+ " GROUP BY a.actor_id, c.name) t ON a.actor_id = t.actor_id";
+
+
 	if (searchWord.equals("")) { // searchWord 공백일때
-		sql2 = sql2 + " LIMIT ?, ?";
+		sql2 = sql2 + " GROUP BY a.actor_id"
+					+ " LIMIT ?, ?";
 		
 		stmt2 = conn.prepareStatement(sql2);
 		stmt2.setInt(1, startRow);
 		stmt2.setInt(2, rowPerPage);
 	} else { // 공백 아닐때 
-		sql2 = sql2 + " WHERE CONCAT(c.first_name, ' ', c.last_name) LIKE ?"
+		sql2 = sql2 + " WHERE CONCAT(a.first_name, ' ', a.last_name) LIKE ?"
+					+ " GROUP BY a.actor_id"
 					+ " LIMIT ?, ?";
 		stmt2 = conn.prepareStatement(sql2);
 		stmt2.setString(1, "%" + searchWord + "%");
@@ -89,20 +96,15 @@
 	while (rs2.next()) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		
-		map.put("Id", rs2.getInt("ID"));
-		map.put("name", rs2.getString("name"));
-		map.put("address", rs2.getString("a.address"));
-		map.put("zipCode", rs2.getString("zipcode"));
-		map.put("phone", rs2.getString("a.phone"));
-		map.put("city", rs2.getString("ct.city"));
-		map.put("country", rs2.getString("co.country"));
-		map.put("notes", rs2.getString("notes"));
-		map.put("Sid", rs2.getString("SID"));
+		map.put("actorId", rs2.getInt("a.actor_id"));
+		map.put("firstName", rs2.getString("a.first_name"));
+		map.put("lastName", rs2.getString("a.last_name"));
+		map.put("filmInfo", rs2.getString("film_info"));
 		
 		list.add(map);
 	}
-%>
 
+%>
 
 <!-- View -->
 <!DOCTYPE html>
@@ -112,9 +114,9 @@
 		<title></title>
 	</head>
 	<body>
-		<h1>Customer List</h1>
+		<h1>Actor Info</h1>
 		
-		<form action="/sakila/d0401/customerList.jsp" method="post">
+		<form action="/sakila/d0401/actorInfo.jsp" method="post">
 			Search:
 			<input type="text" name="searchWord" value=<%if(!searchWord.equals("")){%><%=searchWord%><%}%>>
 			<button type="submit">검색</button>
@@ -122,30 +124,20 @@
 		
 		<table border="1">
 			<tr>
-				<th>Id</th>
-				<th>name</th>
-				<th>address</th>
-				<th>zipCode</th>
-				<th>phone</th>
-				<th>city</th>
-				<th>country</th>
-				<th>notes</th>
-				<th>Sid</th>
+				<th>actorId</th>
+				<th>firstName</th>
+				<th>lastName</th>
+				<th>filmInfo</th>
 			</tr>
 			
 			<%
 				for (HashMap<String, Object> map : list) {
 			%>
 					<tr>
-						<td><%=map.get("Id")%></td>
-						<td><%=map.get("name")%></td>
-						<td><%=map.get("address")%></td>
-						<td><%=map.get("zipCode")%></td>
-						<td><%=map.get("phone")%></td>
-						<td><%=map.get("city")%></td>
-						<td><%=map.get("country")%></td>
-						<td><%=map.get("notes")%></td>
-						<td><%=map.get("Sid")%></td>
+						<td><%=map.get("actorId")%></td>
+						<td><%=map.get("firstName")%></td>
+						<td><%=map.get("lastName")%></td>
+						<td><%=map.get("filmInfo")%></td>
 					</tr>
 			<%
 				}
@@ -153,12 +145,12 @@
 			
 		</table>
 		<!-- 페이징 -->
-		<a href='/sakila/d0401/customerList.jsp?currentPage=1&searchWord=<%=searchWord%>'>[처음]</a>
+		<a href='/sakila/d0401/actorInfo.jsp?currentPage=1&searchWord=<%=searchWord%>'>[처음]</a>
 		
 		<%
 			if (currentPage > 10) {
 		%>
-				<a href='/sakila/d0401/customerList.jsp?currentPage=<%=currentPage - 10%>&searchWord=<%=searchWord%>'>[이전10]</a>
+				<a href='/sakila/d0401/actorInfo.jsp?currentPage=<%=currentPage - 10%>&searchWord=<%=searchWord%>'>[이전10]</a>
 		<%
 			}
 		
@@ -173,7 +165,7 @@
 			for (int i = 1; i <= 10; i++) {
 				if (startPage + i <= lastPage) { // 마지막 페이지까지만 보이게
 		%>
-					<a href='/sakila/d0401/customerList.jsp?currentPage=<%=startPage + i%>&searchWord=<%=searchWord%>'><%=startPage + i%></a>
+					<a href='/sakila/d0401/actorInfo.jsp?currentPage=<%=startPage + i%>&searchWord=<%=searchWord%>'><%=startPage + i%></a>
 		<%
 				}
 			}
@@ -184,11 +176,11 @@
 					currentPage = lastPage - 10;
 				}
 		%>
-				<a href='/sakila/d0401/customerList.jsp?currentPage=<%=currentPage + 10%>&searchWord=<%=searchWord%>'>[다음10]</a>
+				<a href='/sakila/d0401/actorInfo.jsp?currentPage=<%=currentPage + 10%>&searchWord=<%=searchWord%>'>[다음10]</a>
 		<%
 			}
 		%>
-		<a href='/sakila/d0401/customerList.jsp?currentPage=<%=lastPage%>&searchWord=<%=searchWord%>'>[마지막]</a>
-		
+		<a href='/sakila/d0401/actorInfo.jsp?currentPage=<%=lastPage%>&searchWord=<%=searchWord%>'>[마지막]</a>
+
 	</body>
 </html>

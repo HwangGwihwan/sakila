@@ -27,7 +27,13 @@
 			<li><a href="/sakila/d0326/filmList.jsp">영화목록</a></li>
 			<li><a href="/sakila/d0326/actorList.jsp">배우목록</a></li>
 			<li><a href="/sakila/d0327/inventoryList.jsp">인벤토리목록</a></li>
-			<li><a href="/sakila/d0401/customerList.jsp">고객목록</a></li>
+			<li><a href="/sakila/d0401/actorInfo.jsp">ActorInfo</a>
+			<li><a href="/sakila/d0401/customerList.jsp">CustomerList</a>
+			<li><a href="/sakila/d0401/filmList.jsp">FilmList</a>
+			<li><a href="/sakila/d0401/nicerbutslowerfilmList.jsp">nicerbutslowerfilmList</a>
+			<li><a href="/sakila/d0401/salesbyfilmCategory.jsp">salesbyfilmCategory</a>
+			<li><a href="/sakila/d0401/salesbyStore.jsp">salesbyStore</a>
+			<li><a href="/sakila/d0401/staffList.jsp">staffList</a>
 		</ol>
 	</body>
 </html>
