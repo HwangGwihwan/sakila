@@ -155,7 +155,7 @@
 								// rentalDate는 null이 아님 -> 대여 했음 && retunDate가 null임 -> 반납 안했음
 								// 대여 불가능
 						%>
-								<a>반납하기</a>
+								<a href='/sakila/d0401/returnAction.jsp?inventoryId=<%=map.get("inventoryId")%>'>반납하기</a>
 						<%
 							} else { // 나머지 조건은 대여 가능
 						%>
